@@ -1,5 +1,6 @@
 package com.ms.user.controllers;
 
+import com.ms.user.configs.TokenService;
 import com.ms.user.dtos.AuthenticationDTO;
 import com.ms.user.dtos.RegisterDTO;
 import com.ms.user.entities.User;
@@ -26,12 +27,17 @@ public class AuthenticationController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/register")
