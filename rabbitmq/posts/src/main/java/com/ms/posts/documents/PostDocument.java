@@ -1,18 +1,19 @@
 package com.ms.posts.documents;
 
 import com.ms.posts.dtos.PostDTO;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Document(collection = "post")
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostDocument {
 
     @Id
