@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,8 +30,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Page<User> getAll(Pageable pageable){
-        return userRepository.findAll(pageable);
+    public Page<User> getAll(String filter, Pageable pageable){
+        return userRepository.findAll(filter, User.class, pageable);
     }
 
 
