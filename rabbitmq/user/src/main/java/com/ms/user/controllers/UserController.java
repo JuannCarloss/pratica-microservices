@@ -1,6 +1,7 @@
 package com.ms.user.controllers;
 
 import com.ms.user.dtos.UserDTO;
+import com.ms.user.entities.User;
 import com.ms.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,10 +21,11 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity getAll(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "0") int size){
+    public ResponseEntity getAll(@RequestParam(required = false) String filter,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "3") int size){
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserDTO> users = userService.getAll(pageable)
+        Page<UserDTO> users = userService.getAll(filter, pageable)
                 .map(user -> new UserDTO(
                         user.getUsername(),
                         user.getEmail()
