@@ -1,6 +1,7 @@
 package com.ms.user.services;
 
 import com.ms.user.dtos.PostDTO;
+import com.ms.user.enterprise.ValidationException;
 import com.ms.user.entities.User;
 import com.ms.user.producers.EmailProducer;
 import com.ms.user.producers.PostProducer;
@@ -28,7 +29,11 @@ public class UserService {
     @Transactional
     public User postUser(User user){
         if (userRepository.findByUsername(user.getUsername()) != null){
-            return null;
+           throw new ValidationException("username ja está em uso");
+        }
+
+        if (userRepository.findByEmail(user.getEmail()) != null){
+            throw new ValidationException("email já está em uso");
         }
         var save = userRepository.save(user);
         emailProducer.sendEmail(user);
@@ -42,11 +47,11 @@ public class UserService {
     }
 
 
-    public PostDTO publishPost(PostDTO data, String username) throws Exception {
+    public PostDTO publishPost(PostDTO data, String username){
         if (userRepository.findByUsername(username) != null){
             postProducer.publishPost(data, username);
             return data;
         }
-        throw new Exception("usuario não existe");
+        throw new ValidationException("usuario não existe");
     }
 }
