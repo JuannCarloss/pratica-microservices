@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/posting")
-public class PostController {
+public class PostController extends AbstractController{
 
     @Autowired
     private UserService userService;
 
     @PostMapping("{username}")
-    public void newPost(@RequestBody PostDTO data, @PathVariable("username") String username) throws Exception {
+    public void newPost(@RequestBody PostDTO data, @PathVariable("username") String username){
         ResponseEntity.status(HttpStatus.OK).body(userService.publishPost(data, username));
     }
 }
