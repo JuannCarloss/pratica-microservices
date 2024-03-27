@@ -4,11 +4,14 @@ import com.ms.posts.documents.PostDocument;
 import com.ms.posts.dtos.PostDTO;
 import com.ms.posts.repositories.PostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostsService {
@@ -34,5 +37,15 @@ public class PostsService {
 
     public Page<PostDocument> findAll(Pageable pageable){
         return postsRepository.findAll(pageable);
+    }
+
+    @Cacheable("posts")
+    public List<PostDTO> listAll(){
+        System.out.println("sem cache");
+        return postsRepository.findAll().stream().map(post -> new PostDTO(
+                post.getUsername(),
+                post.getTitle(),
+                post.getBody()
+        )).collect(Collectors.toList());
     }
 }
