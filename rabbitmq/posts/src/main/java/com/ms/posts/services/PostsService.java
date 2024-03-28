@@ -41,7 +41,6 @@ public class PostsService {
 
     @Cacheable("posts")
     public List<PostDTO> listAll(){
-        System.out.println("sem cache");
         return postsRepository.findAll().stream().map(post -> new PostDTO(
                 post.getUsername(),
                 post.getTitle(),
